@@ -118,7 +118,11 @@
             <div class="font-bold mt-6">{{ $t('HACK.preview') }}</div>
             <!-- Preview of chart -->
             <div class="dv-chart-container items-stretch h-full w-full mt-2">
-                <highchart :key="chartStore.refreshKey" :options="chartStore.resolvedChartConfig"></highchart>
+                <highchart
+                    ref="chonsive"
+                    :key="chartStore.refreshKey"
+                    :options="chartStore.resolvedChartConfig"
+                ></highchart>
             </div>
         </div>
     </div>
@@ -164,6 +168,8 @@ const validatorErrors = ref<any>([]);
 const ajv = new Ajv({ allErrors: true });
 const validate = ajv.compile(schema);
 
+const chonsive = ref<any>(undefined);
+
 const isSmallScreen = ref(false);
 const hidePage = computed(() => {
     return sidemenuStore.expanded && isSmallScreen.value;
@@ -186,6 +192,24 @@ onMounted(() => {
     // import highcharts schema for validation
     highchartsSchema.value = schema as any;
     updatedConfig.value = chartConfig.value;
+
+    console.log('chonsive in 4');
+    setTimeout(() => {
+        console.log('chonsive');
+        console.log(chonsive.value);
+
+        // this donkey writes a file to the hard drive
+        /*
+        chonsive.value.chart
+            .exportChart({ type: 'image/png', filename: 'hoss' })
+            .then((v: any) => console.log(v))
+            .catch((x: any) => {console.error('reeee');console.error(x)});
+        */
+
+        // this works
+        const svg = chonsive.value.chart.getSVG();
+        console.log(svg);
+    }, 4000);
 });
 
 onBeforeUnmount(() => {
